@@ -415,13 +415,24 @@ function renderResult() {
   const scores = getScores();
   const summary = getSummary(scores);
   const maxScore = 30;
-
-  const scoreRow = (label, value) => `
-    <div class="metric">
-      <div class="metric-line"><span>${label}</span><span>${value}/${maxScore}</span></div>
-      <div class="metric-track"><div class="metric-fill" style="width:${(value / maxScore) * 100}%"></div></div>
-    </div>
-  `;
+  const profile = [
+    { label: "Strategist", value: scores.strategist, color: "#5b2fde" },
+    { label: "Explorer", value: scores.explorer, color: "#7c56f0" },
+    { label: "Connector", value: scores.connector, color: "#9f7cf7" },
+    { label: "Builder", value: scores.builder, color: "#3f23b2" },
+  ];
+  const totalProfileScore = profile.reduce((sum, item) => sum + item.value, 0);
+  let currentAngle = 0;
+  const pieSegments = totalProfileScore
+    ? profile
+        .map((item) => {
+          const start = currentAngle;
+          const slice = (item.value / totalProfileScore) * 360;
+          currentAngle += slice;
+          return `${item.color} ${start.toFixed(2)}deg ${currentAngle.toFixed(2)}deg`;
+        })
+        .join(", ")
+    : "#cbd5e1 0deg 360deg";
 
   return `
     <section class="topbar">
@@ -450,10 +461,26 @@ function renderResult() {
 
         <article class="block white">
           <h3>Your score profile</h3>
-          ${scoreRow("Strategist", scores.strategist)}
-          ${scoreRow("Explorer", scores.explorer)}
-          ${scoreRow("Connector", scores.connector)}
-          ${scoreRow("Builder", scores.builder)}
+          <div class="pie-layout">
+            <div class="pie-chart" style="background: conic-gradient(${pieSegments});">
+              <div class="pie-center">
+                <strong>${totalProfileScore}</strong>
+                <span>Total</span>
+              </div>
+            </div>
+            <div class="pie-legend">
+              ${profile
+                .map(
+                  (item) => `
+                  <div class="legend-row">
+                    <span class="legend-label"><i style="background:${item.color};"></i>${item.label}</span>
+                    <span>${item.value}/${maxScore}</span>
+                  </div>
+                `
+                )
+                .join("")}
+            </div>
+          </div>
           <p style="margin:10px 0 0;font-size:13px;">
             This is a behavioral fingerprint, not a good-vs-bad score.
           </p>
