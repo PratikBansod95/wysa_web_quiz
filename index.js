@@ -69,6 +69,7 @@
           )
           .join("")}
       </div>
+      <div class="result-panel-image" aria-hidden="true"></div>
     </div>
   `;
 })();
