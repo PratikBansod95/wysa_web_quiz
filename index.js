@@ -2,11 +2,12 @@
   const titleEl = document.getElementById("work-card-title");
   const subtitleEl = document.getElementById("work-card-subtitle");
   const ctaEl = document.getElementById("work-card-cta");
+  const retakeEl = document.getElementById("work-card-retake");
   const avatarWrapEl = document.getElementById("work-card-avatar");
   const panelEl = document.getElementById("work-result-panel");
   const rightCard = document.querySelector(".hero-card-right");
 
-  if (!titleEl || !subtitleEl || !ctaEl || !avatarWrapEl || !panelEl || !rightCard) return;
+  if (!titleEl || !subtitleEl || !ctaEl || !retakeEl || !avatarWrapEl || !panelEl || !rightCard) return;
 
   let saved;
   try {
@@ -48,7 +49,11 @@
   titleEl.innerHTML = "Your work pattern<br />snapshot";
   subtitleEl.textContent = "Based on your latest quiz";
   ctaEl.textContent = "VIEW FULL RESULT";
+  retakeEl.hidden = false;
   avatarWrapEl.style.display = "none";
+  retakeEl.addEventListener("click", () => {
+    window.location.href = "quiz.html";
+  });
 
   panelEl.innerHTML = `
     <p class="result-panel-head">Your Next Move</p>
