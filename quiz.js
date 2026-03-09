@@ -153,6 +153,7 @@ const QUESTIONS = [
 
 let step = 0;
 let answers = [];
+let analysisTimer = null;
 
 const app = document.getElementById("app");
 
@@ -292,6 +293,10 @@ function progressPct() {
 }
 
 function restartQuiz() {
+  if (analysisTimer) {
+    clearTimeout(analysisTimer);
+    analysisTimer = null;
+  }
   answers = [];
   step = 0;
   render();
@@ -474,7 +479,7 @@ function renderResult() {
                   (item) => `
                   <div class="legend-row">
                     <span class="legend-label"><i style="background:${item.color};"></i>${item.label}</span>
-                    <span>${item.value}/${maxScore}</span>
+                    <span>${item.value}</span>
                   </div>
                 `
                 )
@@ -524,8 +529,8 @@ function renderResult() {
         </div>
 
         <div class="actions">
-          <button class="btn primary" type="button" id="share-btn">Share this quiz</button>
-          <button class="btn secondary" type="button" id="restart-btn">Retake quiz</button>
+          <p class="share-copy">Help your team finding their work style</p>
+          <button class="btn primary glow" type="button" id="share-btn">Share</button>
           <button class="btn secondary" type="button" id="back-home-btn">Back to home</button>
         </div>
       </section>
@@ -533,10 +538,35 @@ function renderResult() {
   `;
 }
 
+function renderAnalyzing() {
+  return `
+    <section class="topbar">
+      <div class="logo-box">WB</div>
+      <div>
+        <h1>Work Brain Diagnostic</h1>
+        <p>Analyzing your responses...</p>
+      </div>
+    </section>
+
+    <section class="panel panel-pad analyzing-screen">
+      <div class="pulse-ring" aria-hidden="true"></div>
+      <h2>Analyzing your natural work pattern</h2>
+      <p>
+        We are comparing your response behavior across decision style, momentum, execution, and collaboration signals.
+      </p>
+      <div class="analyzing-bar">
+        <span></span>
+      </div>
+      <small>This takes around 5 seconds.</small>
+    </section>
+  `;
+}
+
 function render() {
   const isIntro = step === 0;
   const isQuiz = step > 0 && step <= QUESTIONS.length;
-  const isResult = step > QUESTIONS.length;
+  const isAnalyzing = step === QUESTIONS.length + 1;
+  const isResult = step > QUESTIONS.length + 1;
 
   if (isIntro) {
     app.innerHTML = renderIntro();
@@ -556,6 +586,14 @@ function render() {
         answers.push(currentQuestion.options[i]);
         if (answers.length === QUESTIONS.length) {
           step = QUESTIONS.length + 1;
+          render();
+          if (analysisTimer) clearTimeout(analysisTimer);
+          analysisTimer = setTimeout(() => {
+            step = QUESTIONS.length + 2;
+            analysisTimer = null;
+            render();
+          }, 5000);
+          return;
         } else {
           step += 1;
         }
@@ -565,9 +603,13 @@ function render() {
     return;
   }
 
+  if (isAnalyzing) {
+    app.innerHTML = renderAnalyzing();
+    return;
+  }
+
   if (isResult) {
     app.innerHTML = renderResult();
-    document.getElementById("restart-btn").addEventListener("click", restartQuiz);
     document.getElementById("share-btn").addEventListener("click", shareQuiz);
     document.getElementById("back-home-btn").addEventListener("click", () => {
       window.location.href = "index.html";
