@@ -483,7 +483,6 @@ function renderResult() {
           <span class="badge" style="background:#dcfce7;color:#166534;">Result ready</span>
           <span class="badge">${DIMENSIONS[summary.primary].label} × ${DIMENSIONS[summary.secondary].label}</span>
         </div>
-        <button class="btn secondary top-home-btn" type="button" id="back-home-btn">Back to home</button>
       </div>
       <h2>Your work brain is <span class="accent">${DIMENSIONS[summary.primary].label}</span> with a strong <span class="accent">${DIMENSIONS[summary.secondary].label}</span> layer.</h2>
       <p class="hero-desc">${summary.hook}</p>
@@ -564,6 +563,9 @@ function renderResult() {
             `
             )
             .join("")}
+        </div>
+        <div class="bottom-home-wrap">
+          <button class="btn secondary" type="button" id="back-home-btn">Back to home</button>
         </div>
       </section>
     </section>

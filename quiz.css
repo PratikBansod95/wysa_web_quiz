@@ -285,10 +285,6 @@ body {
   gap: 16px;
 }
 
-.top-home-btn {
-  margin-top: 2px;
-}
-
 .result-head h2 {
   margin: 8px 0 0;
   line-height: 1.15;
@@ -481,6 +477,12 @@ body {
   margin-top: 18px;
 }
 
+.bottom-home-wrap {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .analyzing-screen {
   min-height: 380px;
   display: grid;
@@ -578,6 +580,10 @@ body {
   .result-top {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .bottom-home-wrap {
+    justify-content: flex-start;
   }
 
   .pie-layout {
