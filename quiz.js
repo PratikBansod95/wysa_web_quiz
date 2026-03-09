@@ -464,7 +464,8 @@ function renderQuiz() {
 }
 
 function renderResult() {
-  const rawScores = forcedSavedResult?.rawScores || getScores();
+  const hydratedScores = forcedSavedResult?.rawScores || forcedSavedResult?.normalizedScores;
+  const rawScores = hydratedScores || getScores();
   const scores = normalizeScoresToThirty(rawScores);
   const summary = forcedSavedResult?.summary || getSummary(rawScores);
   if (!forcedSavedResult) {
@@ -598,7 +599,7 @@ function tryHydrateSavedResultMode() {
 
   try {
     const saved = JSON.parse(localStorage.getItem("workBrainLatestResult") || "null");
-    if (saved && saved.rawScores && saved.summary) {
+    if (saved && (saved.rawScores || saved.normalizedScores)) {
       forcedSavedResult = saved;
       step = QUESTIONS.length + 2;
     }

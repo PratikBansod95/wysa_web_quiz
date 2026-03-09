@@ -28,19 +28,6 @@
     { label: "Builder", value: Number(scores.builder) || 0, color: "#3f23b2" },
   ];
 
-  const total = profile.reduce((sum, item) => sum + item.value, 0);
-  let angle = 0;
-  const segments = total
-    ? profile
-        .map((item) => {
-          const start = angle;
-          const slice = (item.value / total) * 360;
-          angle += slice;
-          return `${item.color} ${start.toFixed(2)}deg ${angle.toFixed(2)}deg`;
-        })
-        .join(", ")
-    : "#cbd5e1 0deg 360deg";
-
   const moves = saved.nextMoves.slice(0, 4);
   let activeIndex = 0;
 
@@ -61,7 +48,18 @@
   panelEl.innerHTML = `
     <p class="result-panel-head">Your Next Move</p>
     <div class="result-panel-grid">
-      <div class="result-mini-pie" style="background: conic-gradient(${segments});" aria-label="Work profile pie chart"></div>
+      <div class="result-score-list" aria-label="Work profile scores">
+        ${profile
+          .map(
+            (item) => `
+              <div class="result-score-row">
+                <span class="result-score-label"><i style="background:${item.color};"></i>${item.label}</span>
+                <span>${item.value}</span>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
       <div class="next-move-slider">
         <p class="next-move-text" id="next-move-text"></p>
         <div class="next-move-dots" id="next-move-dots"></div>
