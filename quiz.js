@@ -167,6 +167,35 @@ function getScores() {
   return base;
 }
 
+function normalizeScoresToThirty(scores) {
+  const entries = Object.entries(scores);
+  const totalRaw = entries.reduce((sum, [, value]) => sum + value, 0);
+  if (!totalRaw) return { strategist: 0, explorer: 0, connector: 0, builder: 0 };
+
+  const scaled = entries.map(([key, value]) => {
+    const exact = (value / totalRaw) * 30;
+    const floored = Math.floor(exact);
+    return { key, exact, floored, remainder: exact - floored };
+  });
+
+  let allocated = scaled.reduce((sum, item) => sum + item.floored, 0);
+  let remaining = 30 - allocated;
+
+  scaled
+    .sort((a, b) => b.remainder - a.remainder)
+    .forEach((item) => {
+      if (remaining > 0) {
+        item.floored += 1;
+        remaining -= 1;
+      }
+    });
+
+  return scaled.reduce((acc, item) => {
+    acc[item.key] = item.floored;
+    return acc;
+  }, {});
+}
+
 function getTopTwo(scores) {
   return Object.entries(scores)
     .sort((a, b) => b[1] - a[1])
@@ -417,9 +446,9 @@ function renderQuiz() {
 }
 
 function renderResult() {
-  const scores = getScores();
-  const summary = getSummary(scores);
-  const maxScore = 30;
+  const rawScores = getScores();
+  const scores = normalizeScoresToThirty(rawScores);
+  const summary = getSummary(rawScores);
   const profile = [
     { label: "Strategist", value: scores.strategist, color: "#5b2fde" },
     { label: "Explorer", value: scores.explorer, color: "#7c56f0" },
@@ -489,6 +518,13 @@ function renderResult() {
           <p style="margin:10px 0 0;font-size:13px;">
             This is a behavioral fingerprint, not a good-vs-bad score.
           </p>
+          <div class="score-share">
+            <p class="share-copy">Help your team finding their work style</p>
+            <div class="actions">
+              <button class="btn primary glow" type="button" id="share-btn">Share</button>
+              <button class="btn secondary" type="button" id="back-home-btn">Back to home</button>
+            </div>
+          </div>
         </article>
       </div>
 
@@ -526,12 +562,6 @@ function renderResult() {
             `
             )
             .join("")}
-        </div>
-
-        <div class="actions">
-          <p class="share-copy">Help your team finding their work style</p>
-          <button class="btn primary glow" type="button" id="share-btn">Share</button>
-          <button class="btn secondary" type="button" id="back-home-btn">Back to home</button>
         </div>
       </section>
     </section>
