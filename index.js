@@ -1,13 +1,14 @@
 ﻿(function () {
   const titleEl = document.getElementById("work-card-title");
   const subtitleEl = document.getElementById("work-card-subtitle");
+  const typeEl = document.getElementById("work-card-type");
   const ctaEl = document.getElementById("work-card-cta");
   const retakeEl = document.getElementById("work-card-retake");
   const avatarWrapEl = document.getElementById("work-card-avatar");
   const panelEl = document.getElementById("work-result-panel");
   const rightCard = document.querySelector(".hero-card-right");
 
-  if (!titleEl || !subtitleEl || !ctaEl || !retakeEl || !avatarWrapEl || !panelEl || !rightCard) return;
+  if (!titleEl || !subtitleEl || !typeEl || !ctaEl || !retakeEl || !avatarWrapEl || !panelEl || !rightCard) return;
 
   let saved;
   try {
@@ -27,11 +28,22 @@
     { label: "Connector", value: Number(scores.connector) || 0, color: "#9f7cf7" },
     { label: "Builder", value: Number(scores.builder) || 0, color: "#3f23b2" },
   ];
+  const normalizedKey = (value) => String(value || "").trim().toLowerCase();
+  const toLabel = (value) => {
+    const key = normalizedKey(value);
+    if (!key) return "";
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  };
+  const topTwo = [...profile].sort((a, b) => b.value - a.value).slice(0, 2).map((item) => item.label);
+  const primaryLabel = toLabel(saved.primary) || topTwo[0] || "Strategist";
+  const secondaryLabel = toLabel(saved.secondary) || topTwo[1] || "Builder";
 
   panelEl.hidden = false;
   rightCard.classList.add("has-result");
   titleEl.innerHTML = "Your work pattern<br />snapshot";
   subtitleEl.textContent = "Based on your latest quiz";
+  typeEl.hidden = false;
+  typeEl.textContent = `${primaryLabel} × ${secondaryLabel}`;
   ctaEl.textContent = "VIEW FULL RESULT";
   ctaEl.onclick = () => {
     window.location.href = "quiz.html#result";
