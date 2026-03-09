@@ -27,6 +27,18 @@
     { label: "Connector", value: Number(scores.connector) || 0, color: "#9f7cf7" },
     { label: "Builder", value: Number(scores.builder) || 0, color: "#3f23b2" },
   ];
+  const total = profile.reduce((sum, item) => sum + item.value, 0);
+  let angle = 0;
+  const segments = total
+    ? profile
+        .map((item) => {
+          const start = angle;
+          const slice = (item.value / total) * 360;
+          angle += slice;
+          return `${item.color} ${start.toFixed(2)}deg ${angle.toFixed(2)}deg`;
+        })
+        .join(", ")
+    : "#cbd5e1 0deg 360deg";
 
   panelEl.hidden = false;
   rightCard.classList.add("has-result");
@@ -45,6 +57,7 @@
   panelEl.innerHTML = `
     <p class="result-panel-head">Your Score Snapshot</p>
     <div class="result-panel-grid">
+      <div class="result-mini-pie" style="background: conic-gradient(${segments});" aria-label="Work profile pie chart"></div>
       <div class="result-score-list" aria-label="Work profile scores">
         ${profile
           .map(
