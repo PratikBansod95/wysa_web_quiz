@@ -137,26 +137,14 @@ body {
 
 .result-panel-grid {
   display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 10px;
   align-items: center;
 }
 
 .result-score-list {
   display: grid;
   gap: 10px;
-}
-
-.result-panel-image {
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  justify-self: end;
-  background-image: url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=640&q=80");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid rgba(241, 245, 255, 0.28);
-  box-shadow: 0 8px 20px rgba(16, 7, 36, 0.26);
 }
 
 .result-score-row {
@@ -440,12 +428,6 @@ body {
 
   .result-panel-grid {
     grid-template-columns: 1fr;
-  }
-
-  .result-panel-image {
-    justify-self: start;
-    width: 150px;
-    height: 150px;
   }
 
   .resource-row {
