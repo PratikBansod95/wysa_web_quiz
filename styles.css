@@ -76,6 +76,13 @@ body {
   min-width: 220px;
 }
 
+.hero-card-right.has-result .work-card-type {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  margin: 0;
+}
+
 .work-card-actions {
   display: flex;
   align-items: center;
@@ -473,6 +480,11 @@ body {
   .hero-card-right.has-result .work-card-actions {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .hero-card-right.has-result .work-card-type {
+    position: static;
+    margin: 0 0 12px;
   }
 
   .access-section {
