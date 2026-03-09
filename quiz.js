@@ -478,9 +478,12 @@ function renderResult() {
     </section>
 
     <section class="panel panel-pad">
-      <div class="badge-row result-head">
-        <span class="badge" style="background:#dcfce7;color:#166534;">Result ready</span>
-        <span class="badge">${DIMENSIONS[summary.primary].label} × ${DIMENSIONS[summary.secondary].label}</span>
+      <div class="result-top">
+        <div class="badge-row result-head">
+          <span class="badge" style="background:#dcfce7;color:#166534;">Result ready</span>
+          <span class="badge">${DIMENSIONS[summary.primary].label} × ${DIMENSIONS[summary.secondary].label}</span>
+        </div>
+        <button class="btn secondary top-home-btn" type="button" id="back-home-btn">Back to home</button>
       </div>
       <h2>Your work brain is <span class="accent">${DIMENSIONS[summary.primary].label}</span> with a strong <span class="accent">${DIMENSIONS[summary.secondary].label}</span> layer.</h2>
       <p class="hero-desc">${summary.hook}</p>
@@ -522,7 +525,6 @@ function renderResult() {
             <p class="share-copy">Help your team finding their work style</p>
             <div class="actions">
               <button class="btn primary glow" type="button" id="share-btn">Share</button>
-              <button class="btn secondary" type="button" id="back-home-btn">Back to home</button>
             </div>
           </div>
         </article>

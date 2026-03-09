@@ -278,6 +278,17 @@ body {
   margin-bottom: 20px;
 }
 
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.top-home-btn {
+  margin-top: 2px;
+}
+
 .result-head h2 {
   margin: 8px 0 0;
   line-height: 1.15;
@@ -562,6 +573,11 @@ body {
   .split,
   .plan-grid {
     grid-template-columns: 1fr;
+  }
+
+  .result-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .pie-layout {
