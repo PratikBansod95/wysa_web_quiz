@@ -26,11 +26,12 @@
 
       <article class="hero-card hero-card-right">
         <div class="hero-content">
-          <h2>Discover your natural<br />work pattern</h2>
-          <p class="subtitle">3 min Quiz</p>
-          <button class="cta" type="button" onclick="window.location.href='quiz.html'">START QUIZ</button>
+          <h2 id="work-card-title">Discover your natural<br />work pattern</h2>
+          <p class="subtitle" id="work-card-subtitle">3 min Quiz</p>
+          <div id="work-result-panel" class="work-result-panel" hidden></div>
+          <button class="cta" id="work-card-cta" type="button" onclick="window.location.href='quiz.html'">START QUIZ</button>
         </div>
-        <div class="avatar-wrap" aria-hidden="true">
+        <div class="avatar-wrap" id="work-card-avatar" aria-hidden="true">
           <div class="avatar avatar-quiz"></div>
         </div>
       </article>
@@ -93,5 +94,6 @@
       <button class="floating-toolkit">Well-being Toolkit <span aria-hidden="true">⌄</span></button>
     </section>
   </main>
+  <script src="index.js" defer></script>
 </body>
 </html>

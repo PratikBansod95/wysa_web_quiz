@@ -196,6 +196,21 @@ function normalizeScoresToThirty(scores) {
   }, {});
 }
 
+function persistLatestResult(rawScores, normalizedScores, summary) {
+  const payload = {
+    savedAt: new Date().toISOString(),
+    normalizedScores,
+    nextMoves: summary.actionPlan.slice(0, 4),
+    primary: summary.primary,
+    secondary: summary.secondary,
+  };
+  try {
+    localStorage.setItem("workBrainLatestResult", JSON.stringify(payload));
+  } catch {
+    // Ignore storage failures (private mode / quota).
+  }
+}
+
 function getTopTwo(scores) {
   return Object.entries(scores)
     .sort((a, b) => b[1] - a[1])
@@ -449,6 +464,7 @@ function renderResult() {
   const rawScores = getScores();
   const scores = normalizeScoresToThirty(rawScores);
   const summary = getSummary(rawScores);
+  persistLatestResult(rawScores, scores, summary);
   const profile = [
     { label: "Strategist", value: scores.strategist, color: "#5b2fde" },
     { label: "Explorer", value: scores.explorer, color: "#7c56f0" },
