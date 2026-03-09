@@ -49,6 +49,9 @@
   titleEl.innerHTML = "Your work pattern<br />snapshot";
   subtitleEl.textContent = "Based on your latest quiz";
   ctaEl.textContent = "VIEW FULL RESULT";
+  ctaEl.onclick = () => {
+    window.location.href = "quiz.html#result";
+  };
   retakeEl.hidden = false;
   avatarWrapEl.style.display = "none";
   retakeEl.addEventListener("click", () => {
@@ -87,10 +90,4 @@
   });
 
   renderSlide(0);
-  if (moves.length > 1) {
-    setInterval(() => {
-      const next = (activeIndex + 1) % moves.length;
-      renderSlide(next);
-    }, 10000);
-  }
 })();

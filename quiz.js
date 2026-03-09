@@ -154,6 +154,7 @@ const QUESTIONS = [
 let step = 0;
 let answers = [];
 let analysisTimer = null;
+let forcedSavedResult = null;
 
 const app = document.getElementById("app");
 
@@ -199,7 +200,9 @@ function normalizeScoresToThirty(scores) {
 function persistLatestResult(rawScores, normalizedScores, summary) {
   const payload = {
     savedAt: new Date().toISOString(),
+    rawScores,
     normalizedScores,
+    summary,
     nextMoves: summary.actionPlan.slice(0, 4),
     primary: summary.primary,
     secondary: summary.secondary,
@@ -461,10 +464,12 @@ function renderQuiz() {
 }
 
 function renderResult() {
-  const rawScores = getScores();
+  const rawScores = forcedSavedResult?.rawScores || getScores();
   const scores = normalizeScoresToThirty(rawScores);
-  const summary = getSummary(rawScores);
-  persistLatestResult(rawScores, scores, summary);
+  const summary = forcedSavedResult?.summary || getSummary(rawScores);
+  if (!forcedSavedResult) {
+    persistLatestResult(rawScores, scores, summary);
+  }
   const profile = [
     { label: "Strategist", value: scores.strategist, color: "#5b2fde" },
     { label: "Explorer", value: scores.explorer, color: "#7c56f0" },
@@ -588,6 +593,20 @@ function renderResult() {
   `;
 }
 
+function tryHydrateSavedResultMode() {
+  if (window.location.hash !== "#result") return;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem("workBrainLatestResult") || "null");
+    if (saved && saved.rawScores && saved.summary) {
+      forcedSavedResult = saved;
+      step = QUESTIONS.length + 2;
+    }
+  } catch {
+    // Ignore invalid local storage payload.
+  }
+}
+
 function renderAnalyzing() {
   return `
     <section class="topbar">
@@ -667,4 +686,5 @@ function render() {
   }
 }
 
+tryHydrateSavedResultMode();
 render();
