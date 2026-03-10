@@ -356,7 +356,7 @@ async function shareQuiz() {
   const message =
     `Heya I just took this Work Brain Diagnostic quiz on wysa and got a surprisingly accurate read on how I work, ` +
     `My way of working is ${resultType}.\n` +
-    `Click on the link to find out yours:  https://dev-widget.wysa.io/wrapper/accenturementalwellbeing/index.html?version=42&ssoid=69aee3fb0bc42dbcbf46a466`;
+    `Click on the link to find out yours:  https://dev-widget.wysa.io/wrapper/accenturementalwellbeing/`;
 
   openSharePopup(message);
 }
@@ -386,12 +386,12 @@ function openSharePopup(message) {
   overlay.className = "share-modal-overlay";
   overlay.innerHTML = `
     <div class="share-modal" role="dialog" aria-modal="true" aria-label="Share quiz">
-      <h3>Share Quiz</h3>
-      <p>Message with link</p>
+      <button type="button" class="share-close-btn" id="close-share-btn" aria-label="Close share popup">×</button>
+      <h3>Share</h3>
+      <p class="share-message-copy">You can send this message to a family member to share access</p>
       <textarea readonly>${message}</textarea>
       <div class="share-modal-actions">
-        <button type="button" class="btn primary" id="copy-share-btn">Copy</button>
-        <button type="button" class="btn secondary" id="close-share-btn">Close</button>
+        <button type="button" class="btn primary share-copy-btn" id="copy-share-btn">COPY LINK</button>
       </div>
     </div>
   `;
