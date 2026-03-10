@@ -354,8 +354,8 @@ async function shareQuiz() {
   const summary = forcedSavedResult?.summary || getSummary(hydratedScores);
   const resultType = `${DIMENSIONS[summary.primary].label} × ${DIMENSIONS[summary.secondary].label}`;
   const message =
-    `Heya I found this interesting Quiz on Wysa which help you identify your way of work, ` +
-    `Mine is ${resultType}.\n` +
+    `Heya I just took this Work Brain Diagnostic quiz on wysa and got a surprisingly accurate read on how I work, ` +
+    `My way of working is ${resultType}.\n` +
     `Click on the link to find out yours:  https://dev-widget.wysa.io/wrapper/accenturementalwellbeing/index.html?version=42&ssoid=69aee3fb0bc42dbcbf46a466`;
 
   openSharePopup(message);
