@@ -350,29 +350,77 @@ function restartQuiz() {
 }
 
 async function shareQuiz() {
-  const shareTitle = "Work Brain Diagnostic";
-  const shareText =
-    "I just took this Work Brain Diagnostic and got a surprisingly accurate read on how I work. Try it and compare your result.";
-  const shareUrl = window.location.href;
+  const hydratedScores = forcedSavedResult?.rawScores || forcedSavedResult?.normalizedScores || getScores();
+  const summary = forcedSavedResult?.summary || getSummary(hydratedScores);
+  const resultType = `${DIMENSIONS[summary.primary].label} × ${DIMENSIONS[summary.secondary].label}`;
+  const message =
+    `Heya I found this interesting Quiz on Wysa which help you identify your way of work, ` +
+    `Mine is ${resultType}.\n` +
+    `Click on the link to find out yours:  https://dev-widget.wysa.io/wrapper/accenturementalwellbeing/index.html?version=42&ssoid=69aee3fb0bc42dbcbf46a466`;
 
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
-      return;
-    } catch {
-      return;
-    }
-  }
+  openSharePopup(message);
+}
 
+async function copyTextToClipboard(text) {
   if (navigator.clipboard) {
-    try {
-      await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      window.alert("Share link copied. You can paste it into WhatsApp or any messaging app.");
-      return;
-    } catch {
-      window.alert("Could not copy link on this device.");
-    }
+    await navigator.clipboard.writeText(text);
+    return;
   }
+
+  const tempArea = document.createElement("textarea");
+  tempArea.value = text;
+  tempArea.style.position = "fixed";
+  tempArea.style.opacity = "0";
+  document.body.appendChild(tempArea);
+  tempArea.focus();
+  tempArea.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempArea);
+}
+
+function openSharePopup(message) {
+  const existing = document.querySelector(".share-modal-overlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "share-modal-overlay";
+  overlay.innerHTML = `
+    <div class="share-modal" role="dialog" aria-modal="true" aria-label="Share quiz">
+      <h3>Share Quiz</h3>
+      <p>Message with link</p>
+      <textarea readonly>${message}</textarea>
+      <div class="share-modal-actions">
+        <button type="button" class="btn primary" id="copy-share-btn">Copy</button>
+        <button type="button" class="btn secondary" id="close-share-btn">Close</button>
+      </div>
+    </div>
+  `;
+
+  const close = () => overlay.remove();
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) close();
+  });
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key === "Escape") close();
+    },
+    { once: true }
+  );
+
+  document.body.appendChild(overlay);
+
+  const copyBtn = overlay.querySelector("#copy-share-btn");
+  const closeBtn = overlay.querySelector("#close-share-btn");
+  copyBtn?.addEventListener("click", async () => {
+    try {
+      await copyTextToClipboard(message);
+      copyBtn.textContent = "Copied";
+    } catch {
+      copyBtn.textContent = "Copy failed";
+    }
+  });
+  closeBtn?.addEventListener("click", close);
 }
 
 function renderIntro() {
